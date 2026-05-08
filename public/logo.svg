@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 138" fill="none">
+  <defs>
+    <linearGradient id="lr-grad" x1="20" y1="130" x2="100" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00AAFF"/>
+      <stop offset="50%" stop-color="#007FE8"/>
+      <stop offset="100%" stop-color="#0055DD"/>
+    </linearGradient>
+  </defs>
+  <!-- L -->
+  <path d="M8 12 L8 126 L72 126 L72 108 L28 108 L28 12 Z" fill="url(#lr-grad)"/>
+  <!-- R -->
+  <path d="M52 12 L52 126 L72 126 L72 78 L98 126 L120 126 L92 74 C104 68 112 56 112 40 C112 22 98 12 80 12 Z
+           M72 30 L80 30 C90 30 94 36 94 44 C94 52 90 58 80 58 L72 58 Z"
+        fill="url(#lr-grad)"/>
+</svg>
