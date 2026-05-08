@@ -1,5 +1,25 @@
 export const clients = [
   {
+    id: 10,
+    name: 'Memorial Parque dos Girassóis',
+    avatar: 'MG',
+    color: '#F97316',
+    sector: 'Cemitério',
+    canal: 'Facebook + Google',
+    sheetsId:             '10JD5BvAi1NgpNK2SArkrTOnBHotAxy45-XnBrruUauE',
+    sheetsTab:            'Principal',
+    sheetsTabDaily:       'Principal MTD',
+    sheetsTabDailyGoogle: 'MTD Google Ads',
+    sheetsUrl:            'https://docs.google.com/spreadsheets/d/10JD5BvAi1NgpNK2SArkrTOnBHotAxy45-XnBrruUauE/edit',
+    isLive: true,
+    createdAt: '2026-05-01',
+    goals: {
+      investimento: 15500,
+      leads:        380,
+      cpa:          40.79,
+    },
+  },
+  {
     id: 9,
     name: 'Planos - Jardim da Paz',
     avatar: 'PJ',
