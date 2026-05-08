@@ -76,13 +76,16 @@ export function parseMainSummary(csv) {
 export function parseDailyData(csv) {
   const lines = parseLines(csv)
   const rows = []
+  const now = new Date()
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
   for (const cols of lines) {
     if (!cols || cols.length < 4) continue
 
-    // Must start with a valid date
+    // Must start with a valid date in the current month
     const dateMatch = (cols[0] || '').match(/^\d{4}-\d{2}-\d{2}$/)
     if (!dateMatch) continue
+    if (!cols[0].startsWith(currentMonth)) continue
 
     // Find the investimento column: first col >= 3 that contains a currency-like number
     let offset = 3
@@ -121,10 +124,13 @@ export function parseDailyData(csv) {
 export function parseGoogleDailyData(csv) {
   const lines = parseLines(csv)
   const rows = []
+  const now = new Date()
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
   for (const cols of lines) {
     if (!cols || cols.length < 5) continue
     if (!(cols[0] || '').match(/^\d{4}-\d{2}-\d{2}$/)) continue
+    if (!cols[0].startsWith(currentMonth)) continue
 
     const investimento = toNum(cols[4])
     if (!investimento) continue
