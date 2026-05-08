@@ -1,5 +1,25 @@
 export const clients = [
   {
+    id: 7,
+    name: 'Pet Paz',
+    avatar: 'PP',
+    color: '#F59E0B',
+    sector: 'Funerária Pet',
+    canal: 'Facebook + Google',
+    sheetsId:             '1_TWzOzhqjMzZT0jwOW8n7htBDDjbxKq_4-8Wf2O2K0w',
+    sheetsTab:            'Principal',
+    sheetsTabDaily:       'Principal MTD',
+    sheetsTabDailyGoogle: 'MTD - Google Ads',
+    sheetsUrl:            'https://docs.google.com/spreadsheets/d/1_TWzOzhqjMzZT0jwOW8n7htBDDjbxKq_4-8Wf2O2K0w/edit',
+    isLive: true,
+    createdAt: '2026-05-01',
+    goals: {
+      investimento: 2000,
+      leads:        60,
+      cpa:          25,
+    },
+  },
+  {
     id: 6,
     name: 'D&D Fitness',
     avatar: 'DD',
