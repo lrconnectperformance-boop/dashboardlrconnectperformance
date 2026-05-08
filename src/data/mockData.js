@@ -1,5 +1,24 @@
 export const clients = [
   {
+    id: 9,
+    name: 'Planos - Jardim da Paz',
+    avatar: 'PJ',
+    color: '#EC4899',
+    sector: 'Cemitério',
+    canal: 'Facebook',
+    sheetsId:       '1JKGtAMJfp11dhlrpCmYAPzTej-UHCRqts5S5CORkrTc',
+    sheetsTab:      'Principal',
+    sheetsTabDaily: 'Principal MTD',
+    sheetsUrl:      'https://docs.google.com/spreadsheets/d/1JKGtAMJfp11dhlrpCmYAPzTej-UHCRqts5S5CORkrTc/edit',
+    isLive: true,
+    createdAt: '2026-05-01',
+    goals: {
+      investimento: 5000,
+      leads:        150,
+      cpa:          33.33,
+    },
+  },
+  {
     id: 8,
     name: 'Jardim da Paz',
     avatar: 'JP',
