@@ -91,19 +91,6 @@ export default function Login() {
             ))}
           </div>
 
-          {/* Stats preview */}
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { val: '5', label: 'Clientes ativos' },
-              { val: '30', label: 'Dias de histórico' },
-              { val: '98%', label: 'Uptime' },
-            ].map(s => (
-              <div key={s.label} className="glass rounded-2xl p-4 text-center">
-                <p className="text-2xl font-bold text-white">{s.val}</p>
-                <p className="text-slate-400 text-xs mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Footer */}
