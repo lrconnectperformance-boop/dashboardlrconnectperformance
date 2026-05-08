@@ -1,5 +1,25 @@
 export const clients = [
   {
+    id: 8,
+    name: 'Jardim da Paz',
+    avatar: 'JP',
+    color: '#8B5CF6',
+    sector: 'Cemitério',
+    canal: 'Facebook + Google',
+    sheetsId:             '1jDyDc2rRJ-KR__QL0S91l6WO-hKcGXGH4u5XRCUbOPg',
+    sheetsTab:            'Principal',
+    sheetsTabDaily:       'Principal MTD',
+    sheetsTabDailyGoogle: 'MTD Google Ads',
+    sheetsUrl:            'https://docs.google.com/spreadsheets/d/1jDyDc2rRJ-KR__QL0S91l6WO-hKcGXGH4u5XRCUbOPg/edit',
+    isLive: true,
+    createdAt: '2026-05-01',
+    goals: {
+      investimento: 15000,
+      leads:        330,
+      cpa:          45.45,
+    },
+  },
+  {
     id: 7,
     name: 'Pet Paz',
     avatar: 'PP',
