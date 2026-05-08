@@ -1,7 +1,7 @@
 const USERS = [
-  { email: 'admin',                              password: 'Suceso@admin',  name: 'Admin', role: 'admin' },
-  { email: 'rodolfo@lrconnectperformance.com.br', password: 'Sucesso@2026', name: 'Rodolfo', role: 'user' },
-  { email: 'lucas@lrconnectperformance.com.br',   password: 'Sucesso@2026', name: 'Lucas',   role: 'user' },
+  { email: import.meta.env.VITE_U1_EMAIL, password: import.meta.env.VITE_U1_PASS, name: import.meta.env.VITE_U1_NAME || 'Admin',   role: 'admin' },
+  { email: import.meta.env.VITE_U2_EMAIL, password: import.meta.env.VITE_U2_PASS, name: import.meta.env.VITE_U2_NAME || 'Usuário', role: 'user' },
+  { email: import.meta.env.VITE_U3_EMAIL, password: import.meta.env.VITE_U3_PASS, name: import.meta.env.VITE_U3_NAME || 'Usuário', role: 'user' },
 ]
 
 export function login(email, password) {
