@@ -49,6 +49,8 @@ export function parseMainSummary(csv) {
     if (c0.toLowerCase().includes('google ads')) { section = 'google'; continue }
     // Stop at Métricas de Venda section — we don't need sales data
     if (c0.toLowerCase().includes('venda') || c0.toLowerCase().includes('canal')) break
+    // Planilhas sem divisão por plataforma usam "Total" — mapeia para facebook
+    if (c0.toLowerCase() === 'total' && !section) { section = 'facebook' }
 
     if (!section) continue
 
