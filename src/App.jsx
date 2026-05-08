@@ -6,6 +6,11 @@ import ClientDetail from './pages/ClientDetail'
 import ClientDetailLive from './pages/ClientDetailLive'
 import Historico from './pages/Historico'
 import { clients } from './data/mockData'
+import { isAuthenticated } from './auth'
+
+function PrivateRoute({ children }) {
+  return isAuthenticated() ? children : <Navigate to="/" replace />
+}
 
 function SmartClientDetail() {
   const { id } = useParams()
@@ -19,10 +24,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/clientes" element={<Clientes />} />
-        <Route path="/clientes/:id" element={<SmartClientDetail />} />
-        <Route path="/historico" element={<Historico />} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/clientes" element={<PrivateRoute><Clientes /></PrivateRoute>} />
+        <Route path="/clientes/:id" element={<PrivateRoute><SmartClientDetail /></PrivateRoute>} />
+        <Route path="/historico" element={<PrivateRoute><Historico /></PrivateRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

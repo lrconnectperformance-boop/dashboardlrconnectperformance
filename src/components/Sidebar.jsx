@@ -3,6 +3,7 @@ import {
   LayoutDashboard, Users, History,
   LogOut, ChevronRight,
 } from 'lucide-react'
+import { logout, getUser } from '../auth'
 
 const nav = [
   { to: '/dashboard', label: 'Dashboard Geral', icon: LayoutDashboard },
@@ -12,6 +13,7 @@ const nav = [
 
 export default function Sidebar() {
   const navigate = useNavigate()
+  const user = getUser()
 
   return (
     <aside className="w-64 min-h-screen bg-sidebar flex flex-col flex-shrink-0 relative">
@@ -53,11 +55,11 @@ export default function Sidebar() {
             <img src="/logo.svg" alt="LR" className="w-6 h-6 object-contain" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white text-xs font-semibold truncate">L&amp;R Connect</p>
-            <p className="text-slate-500 text-xs truncate">Admin</p>
+            <p className="text-white text-xs font-semibold truncate">{user?.name || 'L&R Connect'}</p>
+            <p className="text-slate-500 text-xs truncate">{user?.role === 'admin' ? 'Admin' : 'Usuário'}</p>
           </div>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => { logout(); navigate('/') }}
             className="text-slate-500 hover:text-red-400 transition-colors">
             <LogOut size={15} />
           </button>

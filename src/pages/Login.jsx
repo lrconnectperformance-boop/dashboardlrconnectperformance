@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, ArrowRight, Shield, BarChart3, TrendingUp } from 'lucide-react'
+import { login } from '../auth'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -8,11 +9,21 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleLogin = (e) => {
     e.preventDefault()
+    setError('')
     setLoading(true)
-    setTimeout(() => navigate('/dashboard'), 1000)
+    setTimeout(() => {
+      const ok = login(email, password)
+      if (ok) {
+        navigate('/dashboard')
+      } else {
+        setError('E-mail ou senha incorretos.')
+        setLoading(false)
+      }
+    }, 600)
   }
 
   return (
@@ -164,6 +175,10 @@ export default function Login() {
                 </button>
               </div>
 
+              {error && (
+                <p className="text-red-400 text-sm text-center -mb-1">{error}</p>
+              )}
+
               <button
                 type="submit"
                 disabled={loading}
@@ -179,9 +194,6 @@ export default function Login() {
               </button>
             </form>
 
-            <p className="text-slate-600 text-xs text-center mt-6">
-              Use qualquer e-mail e senha para entrar no demo
-            </p>
           </div>
         </div>
       </div>
