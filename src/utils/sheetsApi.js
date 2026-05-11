@@ -175,11 +175,16 @@ export function parseDailyData(csv) {
 }
 
 // ─── DATE NORMALIZER ─────────────────────────────────────────────────────
-// Converts DD/MM/YYYY or DD/MM/YY → YYYY-MM-DD. Returns null if not a date.
+// Normalizes any common date format to YYYY-MM-DD. Returns null if not a date.
 function normalizeDate(raw) {
   if (!raw) return null
-  // Already ISO
+  // Already ISO YYYY-MM-DD
   if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw
+  // Short ISO YY-MM-DD (e.g. 26-05-01 → 2026-05-01)
+  const mShort = raw.match(/^(\d{2})-(\d{2})-(\d{2})$/)
+  if (mShort && parseInt(mShort[1]) >= 20) {
+    return `20${mShort[1]}-${mShort[2]}-${mShort[3]}`
+  }
   // Brazilian DD/MM/YYYY or DD/MM/YY
   const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/)
   if (m) {
