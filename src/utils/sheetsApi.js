@@ -159,32 +159,62 @@ export function parseDailyData(csv) {
 }
 
 // ─── PARSE GOOGLE ADS DAILY (MTD - Google Ads TAB) ───────────────────────
-// Columns: 0=date, 1=dia, 2=Dia, 3=blank, 4=Investimento, 5=CPC,
-//          6=Cliques, 7=Impressão, 8=CTR, 9=Leads, 10=CPA Geral
+// Uses smart header detection (detectColMap) so it works regardless of column order.
+// Falls back to legacy positional mapping (col4=invest, 5=cpc, 6=cliques, 7=impr, 8=ctr, 9=leads, 10=cpa)
+// if no header row is found.
 export function parseGoogleDailyData(csv) {
   const lines = parseLines(csv)
   const rows = []
   const now = new Date()
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
+  // Detect column positions from header row
+  let colMap = null
+  for (const cols of lines) {
+    if (cols.some(c => (c || '').toLowerCase().includes('investimento'))) {
+      colMap = detectColMap(cols)
+      break
+    }
+  }
+
   for (const cols of lines) {
     if (!cols || cols.length < 5) continue
     if (!(cols[0] || '').match(/^\d{4}-\d{2}-\d{2}$/)) continue
     if (!cols[0].startsWith(currentMonth)) continue
 
-    const investimento = toNum(cols[4])
+    let investimento, cpc, cliques, impressoes, ctr, leads, cpa
+
+    if (colMap && colMap.investimento !== -1) {
+      investimento = toNum(cols[colMap.investimento])
+      cpc          = toNum(cols[colMap.cpc])
+      cliques      = toNum(cols[colMap.cliques])
+      impressoes   = toNum(cols[colMap.impressoes])
+      ctr          = toNum(cols[colMap.ctr])
+      leads        = toNum(cols[colMap.leads])
+      cpa          = toNum(cols[colMap.cpa])
+    } else {
+      // Legacy positional fallback
+      investimento = toNum(cols[4])
+      cpc          = toNum(cols[5])
+      cliques      = toNum(cols[6])
+      impressoes   = toNum(cols[7])
+      ctr          = toNum(cols[8])
+      leads        = toNum(cols[9])
+      cpa          = toNum(cols[10])
+    }
+
     if (!investimento) continue
 
     rows.push({
-      date:         cols[0],
-      investimento: investimento        || 0,
-      cpc:          toNum(cols[5])      || 0,
-      cliques:      toNum(cols[6])      || 0,
-      impressoes:   toNum(cols[7])      || 0,
-      ctr:          toNum(cols[8])      || 0,
-      leads:        toNum(cols[9])      || 0,
+      date:        cols[0],
+      investimento: investimento || 0,
+      cpc:          cpc          || 0,
+      cliques:      cliques      || 0,
+      impressoes:   impressoes   || 0,
+      ctr:          ctr          || 0,
+      leads:        leads        || 0,
       mensagemWpp:  0,
-      cpa:          toNum(cols[10])     || 0,
+      cpa:          cpa          || 0,
     })
   }
 
