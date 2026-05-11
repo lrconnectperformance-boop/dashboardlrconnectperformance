@@ -76,14 +76,22 @@ function detectColMap(headerRow) {
   const norm = c => (c||'').toLowerCase().normalize('NFD').replace(/\p{M}/gu,'').replace(/\s+/g,'')
   headerRow.forEach((cell, i) => {
     const c = norm(cell)
-    if (c.includes('investimento'))                          map.investimento = i
-    else if (c.includes('impressao') || c.includes('impressoes')) map.impressoes = i
-    else if (c === 'cpc')                                    map.cpc = i
-    else if (c === 'cliques' || c === 'clicks')              map.cliques = i
-    else if (c === 'ctr')                                    map.ctr = i
-    else if (c.includes('lead') && !c.includes('total'))     map.leads = i
-    else if (c.includes('mensagem') || c.includes('wpp'))    map.mensagemWpp = i
-    else if (c.includes('cpa'))                              map.cpa = i
+    // PT-BR
+    if      (c.includes('investimento'))                                     map.investimento = i
+    else if (c.includes('impressao') || c.includes('impressoes'))            map.impressoes   = i
+    else if (c === 'cpc')                                                    map.cpc          = i
+    else if (c === 'cliques' || c === 'clicks')                              map.cliques      = i
+    else if (c === 'ctr')                                                    map.ctr          = i
+    else if (c.includes('lead') && !c.includes('total'))                     map.leads        = i
+    else if (c.includes('mensagem') || c.includes('wpp'))                    map.mensagemWpp  = i
+    else if (c.includes('cpa'))                                              map.cpa          = i
+    // EN (Facebook Ads Manager raw export)
+    else if (c.includes('amountspent') || c.includes('spent'))               map.investimento = i
+    else if (c.includes('impression'))                                        map.impressoes   = i
+    else if (c.includes('linkclick') || c === 'clicks')                      map.cliques      = i
+    else if (c.includes('messaging') || c.includes('conversation'))          map.mensagemWpp  = i
+    else if (c.includes('costperresult') || c.includes('costperlead'))       map.cpa          = i
+    else if (c.includes('costperclick'))                                      map.cpc          = i
   })
   // Lead sem label: coluna em branco entre mensagemWpp e cpa
   if (map.leads === -1 && map.mensagemWpp !== -1 && map.cpa !== -1) {
@@ -91,7 +99,7 @@ function detectColMap(headerRow) {
       if (!headerRow[i] || !norm(headerRow[i])) { map.leads = i; break }
     }
   }
-  // Sem coluna leads nem coluna em branco: WhatsApp é a conversão (ex: Faruk)
+  // Sem coluna leads nem coluna em branco: WhatsApp é a conversão (ex: Faruk, Aphyra)
   if (map.leads === -1 && map.mensagemWpp !== -1) {
     map.leads = map.mensagemWpp
   }
@@ -105,10 +113,14 @@ export function parseDailyData(csv) {
   const now = new Date()
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
-  // Detect column positions from header row
+  // Detect column positions from header row (PT-BR "investimento" OR EN "amount spent" / "day")
   let colMap = null
   for (const cols of lines) {
-    if (cols.some(c => (c||'').toLowerCase().includes('investimento'))) {
+    const hasHeader = cols.some(c => {
+      const lc = (c||'').toLowerCase()
+      return lc.includes('investimento') || lc.includes('amount') || lc.includes('spent') || lc.includes('impression')
+    })
+    if (hasHeader) {
       colMap = detectColMap(cols)
       break
     }

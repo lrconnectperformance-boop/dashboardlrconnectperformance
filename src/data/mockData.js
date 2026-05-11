@@ -1,5 +1,24 @@
 export const clients = [
   {
+    id: 12,
+    name: 'Aphyra',
+    avatar: 'AP',
+    color: '#7C3AED',
+    sector: 'Suplementos',
+    canal: 'Facebook',
+    sheetsId:       '1G2OBX1g0rQplVYGie62Mp3oUQM4WS-SfutkjwdRwuSo',
+    sheetsTab:      'Principal',
+    sheetsTabDaily: 'Dados - Meta Ads',
+    sheetsUrl:      'https://docs.google.com/spreadsheets/d/1G2OBX1g0rQplVYGie62Mp3oUQM4WS-SfutkjwdRwuSo/edit',
+    isLive: true,
+    createdAt: '2026-05-01',
+    goals: {
+      investimento: 1000,
+      leads:        400,
+      cpa:          2.50,
+    },
+  },
+  {
     id: 11,
     name: 'Faruk Shawarma',
     avatar: 'FS',
