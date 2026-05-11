@@ -91,6 +91,10 @@ function detectColMap(headerRow) {
       if (!headerRow[i] || !norm(headerRow[i])) { map.leads = i; break }
     }
   }
+  // Sem coluna leads nem coluna em branco: WhatsApp é a conversão (ex: Faruk)
+  if (map.leads === -1 && map.mensagemWpp !== -1) {
+    map.leads = map.mensagemWpp
+  }
   return map
 }
 

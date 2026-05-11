@@ -1,5 +1,24 @@
 export const clients = [
   {
+    id: 11,
+    name: 'Faruk Shawarma',
+    avatar: 'FS',
+    color: '#DC2626',
+    sector: 'Alimentação',
+    canal: 'Facebook',
+    sheetsId:       '1BSN2exJpkUTL_2i87if8JXkd3d-inLjo2QOEkwe6hls',
+    sheetsTab:      'Principal',
+    sheetsTabDaily: 'MTD - Principal',
+    sheetsUrl:      'https://docs.google.com/spreadsheets/d/1BSN2exJpkUTL_2i87if8JXkd3d-inLjo2QOEkwe6hls/edit',
+    isLive: true,
+    createdAt: '2026-05-01',
+    goals: {
+      investimento: 2000,
+      leads:        650,
+      cpa:          3.07,
+    },
+  },
+  {
     id: 10,
     name: 'Memorial Parque dos Girassóis',
     avatar: 'MG',
