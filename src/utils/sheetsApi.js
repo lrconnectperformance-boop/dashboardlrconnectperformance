@@ -112,9 +112,9 @@ export function parseDailyData(csv) {
 
   for (const cols of lines) {
     if (!cols || cols.length < 4) continue
-    const dateMatch = (cols[0] || '').match(/^\d{4}-\d{2}-\d{2}$/)
-    if (!dateMatch) continue
-    if (!cols[0].startsWith(currentMonth)) continue
+    const isoDate = normalizeDate(cols[0])
+    if (!isoDate) continue
+    if (!isoDate.startsWith(currentMonth)) continue
 
     let investimento, impressoes, cpc, cliques, ctr, leads, wpp, cpa
 
@@ -143,7 +143,7 @@ export function parseDailyData(csv) {
     if (!investimento) continue
 
     rows.push({
-      date: cols[0],
+      date: isoDate,
       investimento: investimento || 0,
       impressoes:   impressoes   || 0,
       cpc:          cpc          || 0,
@@ -158,10 +158,27 @@ export function parseDailyData(csv) {
   return rows.sort((a, b) => a.date.localeCompare(b.date))
 }
 
+// ─── DATE NORMALIZER ─────────────────────────────────────────────────────
+// Converts DD/MM/YYYY or DD/MM/YY → YYYY-MM-DD. Returns null if not a date.
+function normalizeDate(raw) {
+  if (!raw) return null
+  // Already ISO
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw
+  // Brazilian DD/MM/YYYY or DD/MM/YY
+  const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/)
+  if (m) {
+    const d = m[1].padStart(2, '0')
+    const mo = m[2].padStart(2, '0')
+    const y = m[3].length === 2 ? `20${m[3]}` : m[3]
+    return `${y}-${mo}-${d}`
+  }
+  return null
+}
+
 // ─── PARSE GOOGLE ADS DAILY (MTD - Google Ads TAB) ───────────────────────
 // Uses smart header detection (detectColMap) so it works regardless of column order.
-// Falls back to legacy positional mapping (col4=invest, 5=cpc, 6=cliques, 7=impr, 8=ctr, 9=leads, 10=cpa)
-// if no header row is found.
+// Handles both ISO (YYYY-MM-DD) and Brazilian (DD/MM/YYYY) date formats.
+// Falls back to legacy positional mapping if no header row is found.
 export function parseGoogleDailyData(csv) {
   const lines = parseLines(csv)
   const rows = []
@@ -178,35 +195,47 @@ export function parseGoogleDailyData(csv) {
   }
 
   for (const cols of lines) {
-    if (!cols || cols.length < 5) continue
-    if (!(cols[0] || '').match(/^\d{4}-\d{2}-\d{2}$/)) continue
-    if (!cols[0].startsWith(currentMonth)) continue
+    if (!cols || cols.length < 4) continue
+
+    // Try col 0 then col 1 for date — some sheets have an index column first
+    let isoDate = normalizeDate(cols[0])
+    let dataOffset = 0
+    if (!isoDate) {
+      isoDate = normalizeDate(cols[1])
+      dataOffset = 1
+    }
+    if (!isoDate) continue
+    if (!isoDate.startsWith(currentMonth)) continue
+
+    // Shift colMap indices when there's a leading non-date column
+    const get = (idx) => idx === -1 ? null : toNum(cols[idx + dataOffset])
 
     let investimento, cpc, cliques, impressoes, ctr, leads, cpa
 
     if (colMap && colMap.investimento !== -1) {
-      investimento = toNum(cols[colMap.investimento])
-      cpc          = toNum(cols[colMap.cpc])
-      cliques      = toNum(cols[colMap.cliques])
-      impressoes   = toNum(cols[colMap.impressoes])
-      ctr          = toNum(cols[colMap.ctr])
-      leads        = toNum(cols[colMap.leads])
-      cpa          = toNum(cols[colMap.cpa])
+      investimento = get(colMap.investimento)
+      cpc          = get(colMap.cpc)
+      cliques      = get(colMap.cliques)
+      impressoes   = get(colMap.impressoes)
+      ctr          = get(colMap.ctr)
+      leads        = get(colMap.leads)
+      cpa          = get(colMap.cpa)
     } else {
-      // Legacy positional fallback
-      investimento = toNum(cols[4])
-      cpc          = toNum(cols[5])
-      cliques      = toNum(cols[6])
-      impressoes   = toNum(cols[7])
-      ctr          = toNum(cols[8])
-      leads        = toNum(cols[9])
-      cpa          = toNum(cols[10])
+      // Legacy positional fallback (col4=invest when dataOffset=0)
+      const base = 4 - dataOffset
+      investimento = toNum(cols[base])
+      cpc          = toNum(cols[base + 1])
+      cliques      = toNum(cols[base + 2])
+      impressoes   = toNum(cols[base + 3])
+      ctr          = toNum(cols[base + 4])
+      leads        = toNum(cols[base + 5])
+      cpa          = toNum(cols[base + 6])
     }
 
     if (!investimento) continue
 
     rows.push({
-      date:        cols[0],
+      date:         isoDate,
       investimento: investimento || 0,
       cpc:          cpc          || 0,
       cliques:      cliques      || 0,
