@@ -93,6 +93,12 @@ function detectColMap(headerRow) {
     else if (c.includes('costperresult') || c.includes('costperlead'))       map.cpa          = i
     else if (c.includes('costperclick'))                                      map.cpc          = i
   })
+  // "Total de Leads" tem prioridade máxima como coluna de leads
+  // (cobre clientes que somam Wpp + Form em uma coluna total)
+  for (let i = 0; i < headerRow.length; i++) {
+    const c = norm(headerRow[i])
+    if (c.includes('total') && c.includes('lead')) { map.leads = i; break }
+  }
   // Lead sem label: coluna em branco entre mensagemWpp e cpa
   if (map.leads === -1 && map.mensagemWpp !== -1 && map.cpa !== -1) {
     for (let i = map.mensagemWpp + 1; i < map.cpa; i++) {
