@@ -158,16 +158,26 @@ export function parseDailyData(csv) {
 
     if (!investimento) continue
 
+    const inv  = investimento || 0
+    const cliq = cliques      || 0
+    const impr = impressoes   || 0
+    const lds  = leads        || 0
+
+    // Compute derived metrics when column is absent in sheet (e.g. raw FB export)
+    const cpcFinal = (cpc && cpc > 0) ? cpc : (cliq > 0 ? inv / cliq  : 0)
+    const ctrFinal = (ctr && ctr > 0) ? ctr : (impr > 0 ? (cliq / impr) * 100 : 0)
+    const cpaFinal = (cpa && cpa > 0) ? cpa : (lds  > 0 ? inv  / lds  : 0)
+
     rows.push({
-      date: isoDate,
-      investimento: investimento || 0,
-      impressoes:   impressoes   || 0,
-      cpc:          cpc          || 0,
-      cliques:      cliques      || 0,
-      ctr:          ctr          || 0,
-      leads:        leads        || 0,
-      mensagemWpp:  wpp          || 0,
-      cpa:          cpa          || 0,
+      date:        isoDate,
+      investimento: inv,
+      impressoes:   impr,
+      cpc:          cpcFinal,
+      cliques:      cliq,
+      ctr:          ctrFinal,
+      leads:        lds,
+      mensagemWpp:  wpp || 0,
+      cpa:          cpaFinal,
     })
   }
 

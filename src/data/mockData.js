@@ -8,7 +8,7 @@ export const clients = [
     canal: 'Facebook',
     sheetsId:       '1G2OBX1g0rQplVYGie62Mp3oUQM4WS-SfutkjwdRwuSo',
     sheetsTab:      'Principal',
-    sheetsTabDaily: 'MTD - Principal',
+    sheetsTabDaily: 'Dados - Meta Ads',
     sheetsUrl:      'https://docs.google.com/spreadsheets/d/1G2OBX1g0rQplVYGie62Mp3oUQM4WS-SfutkjwdRwuSo/edit',
     isLive: true,
     createdAt: '2026-05-01',
