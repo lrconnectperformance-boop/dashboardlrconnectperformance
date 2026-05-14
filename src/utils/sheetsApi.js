@@ -25,9 +25,15 @@ function parseLines(csv) {
 }
 
 // ─── VALUE CLEANER ────────────────────────────────────────────────────────
+// Handles both PT-BR format (1.234,56) and EN format (1234.56 / 113.35)
 function toNum(raw) {
   if (!raw || raw === '' || raw === '#DIV/0!' || raw === 'N/A') return null
-  const s = raw.replace(/R\$\s*/g, '').replace(/\./g, '').replace(',', '.').replace('%', '').trim()
+  let s = raw.replace(/R\$\s*/g, '').replace(/%/, '').trim()
+  if (s.includes(',')) {
+    // PT-BR: dots = thousands separators, comma = decimal
+    s = s.replace(/\./g, '').replace(',', '.')
+  }
+  // EN: dot already is decimal separator — leave as-is
   const n = parseFloat(s)
   return isNaN(n) ? null : n
 }
@@ -85,13 +91,18 @@ function detectColMap(headerRow) {
     else if (c.includes('lead') && !c.includes('total'))                     map.leads        = i
     else if (c.includes('mensagem') || c.includes('wpp'))                    map.mensagemWpp  = i
     else if (c.includes('cpa'))                                              map.cpa          = i
-    // EN (Facebook Ads Manager raw export)
+    // EN — Facebook Ads Manager raw export
     else if (c.includes('amountspent') || c.includes('spent'))               map.investimento = i
     else if (c.includes('impression'))                                        map.impressoes   = i
     else if (c.includes('linkclick') || c === 'clicks')                      map.cliques      = i
     else if (c.includes('messaging') || c.includes('conversation'))          map.mensagemWpp  = i
     else if (c.includes('costperresult') || c.includes('costperlead'))       map.cpa          = i
     else if (c.includes('costperclick'))                                      map.cpc          = i
+    // EN — Google Ads Manager raw export (Day, Conversions, Cost/conv., Cost(Spend), Clicks, Impressions, CTR)
+    else if (c.includes('conversion'))                                        map.leads        = i
+    else if (c.includes('spend') || c === 'cost(spend)')                     map.investimento = i
+    else if (c.includes('cost') && c.includes('conv'))                       map.cpa          = i
+    else if (c === 'clicks')                                                  map.cliques      = i
   })
   // "Total de Leads" tem prioridade máxima como coluna de leads
   // (cobre clientes que somam Wpp + Form em uma coluna total)

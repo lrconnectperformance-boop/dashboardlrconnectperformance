@@ -86,7 +86,7 @@ export const clients = [
     sheetsId:             '1jDyDc2rRJ-KR__QL0S91l6WO-hKcGXGH4u5XRCUbOPg',
     sheetsTab:            'Principal',
     sheetsTabDaily:       'Principal MTD',
-    sheetsTabDailyGoogle: 'MTD Google Ads',
+    sheetsTabDailyGoogle: 'Google Ads - data,gasto,lead,cpa',
     sheetsUrl:            'https://docs.google.com/spreadsheets/d/1jDyDc2rRJ-KR__QL0S91l6WO-hKcGXGH4u5XRCUbOPg/edit',
     isLive: true,
     createdAt: '2026-05-01',
