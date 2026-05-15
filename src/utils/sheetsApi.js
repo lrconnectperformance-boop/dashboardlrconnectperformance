@@ -233,10 +233,16 @@ export function parseGoogleDailyData(csv) {
   const now = new Date()
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
-  // Detect column positions from header row
+  // Detect column positions from header row (PT-BR or EN Google Ads export)
   let colMap = null
   for (const cols of lines) {
-    if (cols.some(c => (c || '').toLowerCase().includes('investimento'))) {
+    const hasHeader = cols.some(c => {
+      const lc = (c || '').toLowerCase()
+      return lc.includes('investimento') || lc.includes('impression') ||
+             lc.includes('conversion')  || lc.includes('spend') ||
+             lc.includes('amount')
+    })
+    if (hasHeader) {
       colMap = detectColMap(cols)
       break
     }
